@@ -2,6 +2,8 @@
 
 This document explains **every major technology** in the repository: what it is, what problem it solves, and where you will see it in the codebase. The goal is to study **many real-world patterns in one integrated system**—microservices, data, messaging, security, AI, automation, and operations.
 
+For **system diagrams, API contracts, database schemas, and request flows**, see **[ARCHITECTURE.md](ARCHITECTURE.md)** (HLD + LLD).
+
 ---
 
 ## Map: learning goals by area

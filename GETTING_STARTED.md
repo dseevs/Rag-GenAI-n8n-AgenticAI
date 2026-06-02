@@ -1,6 +1,9 @@
 # Getting started — run VirtuLab locally
 
-Step-by-step guide for anyone cloning **[Rag-GenAI-n8n-AgenticAI](https://github.com/dseevs/Rag-GenAI-n8n-AgenticAI)**. For what each technology does and why it is in the stack, see **[TECHNOLOGY_STACK.md](TECHNOLOGY_STACK.md)**.
+Step-by-step guide for anyone cloning **[Rag-GenAI-n8n-AgenticAI](https://github.com/dseevs/Rag-GenAI-n8n-AgenticAI)**.
+
+- **Architecture (HLD + LLD):** [ARCHITECTURE.md](ARCHITECTURE.md)  
+- **Technologies explained:** [TECHNOLOGY_STACK.md](TECHNOLOGY_STACK.md)
 
 ---
 
