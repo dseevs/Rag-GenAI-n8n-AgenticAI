@@ -16,6 +16,8 @@
 | **[ARCHITECTURE.md](ARCHITECTURE.md)** | **High-level design (HLD)** + **low-level design (LLD)** — diagrams, APIs, schemas, flows |
 | **[TECHNOLOGY_STACK.md](TECHNOLOGY_STACK.md)** | Every technology explained — what it is and what concept it teaches |
 | **[GITHUB_SETUP.md](GITHUB_SETUP.md)** | Clone, SSH/PAT, push, security checklist |
+| **[LINKEDIN_POST.md](LINKEDIN_POST.md)** | LinkedIn launch post (Q&A format) |
+| **[LINKEDIN_CAROUSEL.md](LINKEDIN_CAROUSEL.md)** | 10-slide carousel + diagram export |
 | **[local-setup/README.md](local-setup/README.md)** | Private corpus, lab content, secrets |
 
 ---

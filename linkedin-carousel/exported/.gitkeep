@@ -1,0 +1,3 @@
+# PNG diagrams appear here after export.
+# Run: ./export-diagrams.sh
+# Or paste diagrams/*.mmd into https://mermaid.live → Export PNG
