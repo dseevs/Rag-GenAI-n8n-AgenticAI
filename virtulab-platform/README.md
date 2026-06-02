@@ -1,6 +1,6 @@
 # VirtuLab Platform — Phase 1–3
 
-> **Public repo note:** Internal runbooks under `docs/` are not published. Use the root [`README.md`](../README.md) and [`local-setup/`](../local-setup/) for setup; keep phase docs locally if you need them.
+> **Public repo note:** Internal runbooks under `docs/` are not published. Use **[GETTING_STARTED.md](../GETTING_STARTED.md)** and **[TECHNOLOGY_STACK.md](../TECHNOLOGY_STACK.md)** at the repo root; keep phase docs locally if you need them.
 
 Reactive Spring Boot microservices: **auth**, **session**, **lab-events**, **graphql-gateway** + Postgres, Redis, Redpanda/Kafka, Kong, Keycloak.
 

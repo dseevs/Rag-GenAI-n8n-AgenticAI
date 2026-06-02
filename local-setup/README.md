@@ -2,6 +2,8 @@
 
 These folders are **gitignored** on purpose. Copy or create them on your machine after cloning.
 
+**First time?** Follow **[GETTING_STARTED.md](../GETTING_STARTED.md)** — it includes a minimal sample RAG file you can paste in minutes.
+
 ## 1. RAG corpus — `virtulab-platform/rag-corpus/`
 
 Markdown sources ingested by `rag-ingest-service` (pgvector + embeddings).
