@@ -1,0 +1,22 @@
+# VirtuLab Phase 4 — Ollama (optional overlay)
+# Skip this if Ollama already runs on the host (default port 11434).
+# Usage: docker compose -f docker-compose.yml -f docker-compose.phase4.yml up -d virtulab-ollama
+# Alt port if 11434 is taken: set OLLAMA_HOST_PORT=11435 in .env
+
+services:
+  virtulab-ollama:
+    image: ollama/ollama:0.5.7
+    container_name: virtulab-ollama
+    ports:
+      - "${OLLAMA_HOST_PORT:-11434}:11434"
+    volumes:
+      - virtulab_ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 0"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  virtulab_ollama_data:

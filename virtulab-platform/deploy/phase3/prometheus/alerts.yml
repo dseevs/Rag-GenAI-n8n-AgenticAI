@@ -1,0 +1,13 @@
+groups:
+  - name: virtulab_resilience4j
+    rules:
+      - alert: CircuitBreakerOpen
+        expr: resilience4j_circuitbreaker_state{state="open"} == 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Circuit breaker open on {{ $labels.name }}"
+          description: >-
+            Circuit breaker {{ $labels.name }} on {{ $labels.application }}
+            has been open for over 1 minute.

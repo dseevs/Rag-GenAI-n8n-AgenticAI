@@ -1,0 +1,41 @@
+# VirtuLab Phase 3 — Prometheus + Grafana (optional overlay)
+# Usage: docker compose -f docker-compose.yml -f docker-compose.phase3.yml up -d
+# Or:    ./scripts/run-phase3.sh
+
+services:
+  virtulab-prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: virtulab-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./phase3/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./phase3/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - virtulab_prometheus_data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+
+  virtulab-grafana:
+    image: grafana/grafana:11.2.0
+    container_name: virtulab-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/virtulab-phase3-services.json
+    volumes:
+      - ./phase3/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./phase3/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - virtulab_grafana_data:/var/lib/grafana
+    depends_on:
+      - virtulab-prometheus
+
+volumes:
+  virtulab_prometheus_data:
+  virtulab_grafana_data:

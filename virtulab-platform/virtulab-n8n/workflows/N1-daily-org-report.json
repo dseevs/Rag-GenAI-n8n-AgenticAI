@@ -1,0 +1,53 @@
+{
+  "name": "N1 — Daily org report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 6 * * *" }]
+        }
+      },
+      "id": "cron-daily",
+      "name": "Daily 06:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://host.docker.internal:8091/api/v1/analytics/org-funnel?orgId=org-dev",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "http-funnel",
+      "name": "GET org funnel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300],
+      "notes": "Header Auth: Authorization Bearer <student1 or admin token>"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { message: 'Daily report fetched', rows: $input.first().json.rows?.length ?? 0 } }];"
+      },
+      "id": "code-log",
+      "name": "Log summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300]
+    }
+  ],
+  "connections": {
+    "Daily 06:00": {
+      "main": [[{ "node": "GET org funnel", "type": "main", "index": 0 }]]
+    },
+    "GET org funnel": {
+      "main": [[{ "node": "Log summary", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "phase7" }]
+}

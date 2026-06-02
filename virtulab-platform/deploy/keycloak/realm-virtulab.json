@@ -1,0 +1,90 @@
+{
+  "realm": "virtulab",
+  "enabled": true,
+  "displayName": "VirtuLab",
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "roles": {
+    "realm": [
+      { "name": "CLIENT" },
+      { "name": "DEVELOPER" },
+      { "name": "SUPER_ADMIN" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "virtulab-web",
+      "name": "VirtuLab Web App",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "directAccessGrantsEnabled": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3000/login##http://localhost:3000/*"
+      },
+      "redirectUris": [
+        "http://localhost:3000/api/auth/callback/keycloak"
+      ],
+      "webOrigins": [
+        "http://localhost:3000"
+      ]
+    },
+    {
+      "clientId": "virtulab-postman",
+      "name": "VirtuLab Postman Dev",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "virtulab-postman-secret",
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "+"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "student1",
+      "enabled": true,
+      "email": "student1@virtulab.local",
+      "emailVerified": true,
+      "firstName": "Student",
+      "lastName": "One",
+      "credentials": [{ "type": "password", "value": "password", "temporary": false }],
+      "realmRoles": ["CLIENT"]
+    },
+    {
+      "username": "dev1",
+      "enabled": true,
+      "email": "dev1@virtulab.local",
+      "emailVerified": true,
+      "firstName": "Dev",
+      "lastName": "One",
+      "credentials": [{ "type": "password", "value": "password", "temporary": false }],
+      "realmRoles": ["DEVELOPER"]
+    },
+    {
+      "username": "admin1",
+      "enabled": true,
+      "email": "admin1@virtulab.local",
+      "emailVerified": true,
+      "firstName": "Super",
+      "lastName": "Admin",
+      "credentials": [{ "type": "password", "value": "password", "temporary": false }],
+      "realmRoles": ["SUPER_ADMIN"]
+    }
+  ]
+}
+

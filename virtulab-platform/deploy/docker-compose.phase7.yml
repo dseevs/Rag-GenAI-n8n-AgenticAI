@@ -1,0 +1,30 @@
+# VirtuLab Phase 7 — n8n workflow automation
+# UI: http://localhost:5680  (user: admin / admin — change on first login)
+
+services:
+  virtulab-n8n:
+    image: n8nio/n8n:1.73.1
+    container_name: virtulab-n8n
+    ports:
+      - "5680:5678"
+    environment:
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: http://localhost:5680/
+      GENERIC_TIMEZONE: UTC
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: admin
+      N8N_BASIC_AUTH_PASSWORD: admin
+    volumes:
+      - virtulab_n8n_data:/home/node/.n8n
+      - ../virtulab-n8n/workflows:/workflows:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5678/healthz || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  virtulab_n8n_data:

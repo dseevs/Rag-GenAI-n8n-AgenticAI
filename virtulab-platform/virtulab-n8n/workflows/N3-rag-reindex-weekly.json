@@ -1,0 +1,41 @@
+{
+  "name": "N3 — Weekly RAG reindex",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "weeks", "weeksInterval": 1 }]
+        }
+      },
+      "id": "cron",
+      "name": "Every week",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8086/api/v1/rag/reindex",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "http-reindex",
+      "name": "POST rag reindex",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300],
+      "notesInFlow": true,
+      "notes": "Add Header Auth credential: Authorization = Bearer <dev1 Keycloak token> (refresh weekly in dev)"
+    }
+  ],
+  "connections": {
+    "Every week": {
+      "main": [[{ "node": "POST rag reindex", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "phase7" }, { "name": "virtulab" }]
+}

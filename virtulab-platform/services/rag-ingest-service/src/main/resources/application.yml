@@ -1,0 +1,37 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: rag-ingest-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER:http://localhost:9080/realms/virtulab}
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5434}/${DB_NAME:virtulab}
+    username: ${DB_USER:virtulab}
+    password: ${DB_PASSWORD:virtulab}
+
+virtulab:
+  rag:
+    corpus-path: ${CORPUS_PATH:rag-corpus}
+    embedding-dimensions: 768
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      embed-model: ${OLLAMA_EMBED_MODEL:nomic-embed-text}
+  temporal:
+    enabled: ${TEMPORAL_ENABLED:false}
+    target: ${TEMPORAL_TARGET:localhost:7233}
+    namespace: ${TEMPORAL_NAMESPACE:default}
+    task-queue: ${TEMPORAL_TASK_QUEUE:virtulab-rag}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}

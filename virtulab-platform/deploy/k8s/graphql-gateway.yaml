@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-gateway
+  namespace: virtulab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graphql-gateway
+  template:
+    metadata:
+      labels:
+        app: graphql-gateway
+    spec:
+      containers:
+        - name: graphql-gateway
+          image: ghcr.io/virtulab/graphql-gateway-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8097
+          envFrom:
+            - configMapRef:
+                name: virtulab-config
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8097
+            initialDelaySeconds: 25
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: graphql-gateway
+  namespace: virtulab
+spec:
+  selector:
+    app: graphql-gateway
+  ports:
+    - port: 8097
+      targetPort: 8097
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: virtulab-ingress
+  namespace: virtulab
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: virtulab.local
+      http:
+        paths:
+          - path: /graphql
+            pathType: Prefix
+            backend:
+              service:
+                name: graphql-gateway
+                port:
+                  number: 8097

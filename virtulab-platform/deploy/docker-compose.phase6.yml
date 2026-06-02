@@ -1,0 +1,19 @@
+# VirtuLab Phase 6 — RabbitMQ (optional overlay)
+# Ports: 5673 (AMQP), 15673 (management UI) — avoids default 5672/15672
+
+services:
+  virtulab-rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: virtulab-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: virtulab
+      RABBITMQ_DEFAULT_PASS: virtulab
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 20s

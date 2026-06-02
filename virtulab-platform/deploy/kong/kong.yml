@@ -1,0 +1,136 @@
+_format_version: "3.0"
+
+consumers:
+  - username: virtulab-internal
+    keyauth_credentials:
+      - key: virtulab-n8n-dev-key
+
+services:
+  - name: auth-service
+    url: http://host.docker.internal:8081
+    routes:
+      - name: auth-routes
+        paths:
+          - /api/v1/auth
+        strip_path: false
+
+  - name: session-service
+    url: http://host.docker.internal:8082
+    routes:
+      - name: session-routes
+        paths:
+          - /api/v1/sessions
+        strip_path: false
+
+  - name: lab-events-service
+    url: http://host.docker.internal:8083
+    routes:
+      - name: events-routes
+        paths:
+          - /api/v1/events
+        strip_path: false
+
+  - name: graphql-gateway
+    url: http://host.docker.internal:8097
+    routes:
+      - name: graphql-route
+        paths:
+          - /graphql
+        strip_path: false
+
+  - name: ai-tutor-service
+    url: http://host.docker.internal:8084
+    routes:
+      - name: ai-routes
+        paths:
+          - /api/v1/ai
+        strip_path: false
+
+  - name: agent-orchestrator-service
+    url: http://host.docker.internal:8085
+    routes:
+      - name: agents-routes
+        paths:
+          - /api/v1/agents
+        strip_path: false
+
+  - name: rag-ingest-service
+    url: http://host.docker.internal:8086
+    routes:
+      - name: rag-routes
+        paths:
+          - /api/v1/rag
+        strip_path: false
+
+  - name: analytics-query-service
+    url: http://host.docker.internal:8091
+    routes:
+      - name: analytics-routes
+        paths:
+          - /api/v1/analytics
+        strip_path: false
+
+  - name: audit-service
+    url: http://host.docker.internal:8096
+    routes:
+      - name: audit-routes
+        paths:
+          - /api/v1/audit
+        strip_path: false
+
+  - name: ml-scoring-service
+    url: http://host.docker.internal:8095
+    routes:
+      - name: ml-routes
+        paths:
+          - /api/v1/ml
+        strip_path: false
+
+  - name: quiz-service
+    url: http://host.docker.internal:8088
+    routes:
+      - name: quiz-routes
+        paths:
+          - /api/v1/quiz
+        strip_path: false
+
+  - name: websocket-gateway-service
+    url: http://host.docker.internal:8090
+    routes:
+      - name: websocket-routes
+        paths:
+          - /api/v1/ws
+        strip_path: false
+
+  - name: n8n
+    url: http://host.docker.internal:5680
+    routes:
+      - name: n8n-internal
+        paths:
+          - /internal/n8n
+        strip_path: true
+        plugins:
+          - name: key-auth
+            config:
+              key_names:
+                - X-API-Key
+
+plugins:
+  - name: cors
+    config:
+      origins:
+        - http://localhost:3000
+        - http://localhost:8080
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      headers:
+        - Authorization
+        - Content-Type
+        - Idempotency-Key
+        - X-Request-Id
+      credentials: true
+      max_age: 3600

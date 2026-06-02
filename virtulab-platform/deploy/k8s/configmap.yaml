@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: virtulab-config
+  namespace: virtulab
+data:
+  DB_HOST: "virtulab-postgres"
+  DB_PORT: "5432"
+  DB_NAME: "virtulab"
+  DB_USER: "virtulab"
+  REDIS_HOST: "virtulab-redis"
+  REDIS_PORT: "6379"
+  KAFKA_BOOTSTRAP: "virtulab-redpanda:9092"
+  KEYCLOAK_ISSUER: "http://virtulab-keycloak:8080/realms/virtulab"
+  HIKARI_MAX_POOL: "20"
+  R2DBC_POOL_MAX: "20"

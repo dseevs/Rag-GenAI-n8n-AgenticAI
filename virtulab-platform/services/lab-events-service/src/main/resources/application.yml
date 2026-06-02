@@ -1,0 +1,75 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: lab-events-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER:http://localhost:9080/realms/virtulab}
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5434}/${DB_NAME:virtulab}?schema=events
+    username: ${DB_USER:virtulab}
+    password: ${DB_PASSWORD:virtulab}
+    pool:
+      enabled: true
+      initial-size: ${R2DBC_POOL_INITIAL:5}
+      max-size: ${R2DBC_POOL_MAX:20}
+      max-idle-time: 30m
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6380}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9095}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5673}
+    username: ${RABBITMQ_USER:virtulab}
+    password: ${RABBITMQ_PASSWORD:virtulab}
+
+virtulab:
+  jwt:
+    secret: ${JWT_SECRET:virtulab-dev-secret-change-me-32chars-minimum!!}
+  flyway:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5434}/${DB_NAME:virtulab}
+    user: ${DB_USER:virtulab}
+    password: ${DB_PASSWORD:virtulab}
+  kafka:
+    topic:
+      progress: lab.progress.v1
+  rabbitmq:
+    exchange: virtulab.tasks
+    queue:
+      notification: q.notification.email
+    routing-key:
+      notification: notification.email
+  n8n:
+    progress-webhook-url: ${N8N_PROGRESS_WEBHOOK:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      kafka:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    com.virtulab: INFO
+    org.apache.kafka: WARN

@@ -1,0 +1,42 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: analytics-ingest-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5434}/${DB_NAME:virtulab}
+    username: ${DB_USER:virtulab}
+    password: ${DB_PASSWORD:virtulab}
+    hikari:
+      pool-name: analytics-ingest-pool
+      maximum-pool-size: ${HIKARI_MAX_POOL:15}
+      minimum-idle: 3
+      connection-timeout: 30000
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9095}
+    consumer:
+      group-id: analytics-ingest
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+virtulab:
+  kafka:
+    topics:
+      progress: lab.progress.v1
+      ai: lab.ai.v1
+      quiz: lab.quiz.v1
+  flyway:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5434}/${DB_NAME:virtulab}
+    user: ${DB_USER:virtulab}
+    password: ${DB_PASSWORD:virtulab}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}

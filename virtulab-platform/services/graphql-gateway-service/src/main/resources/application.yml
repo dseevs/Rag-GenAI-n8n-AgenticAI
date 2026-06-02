@@ -1,0 +1,32 @@
+server:
+  port: 8097
+
+spring:
+  application:
+    name: graphql-gateway-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER:http://localhost:9080/realms/virtulab}
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+
+virtulab:
+  services:
+    session:
+      base-url: ${SESSION_SERVICE_URL:http://localhost:8082}
+    events:
+      base-url: ${EVENTS_SERVICE_URL:http://localhost:8083}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}
+

@@ -1,0 +1,37 @@
+{
+  "name": "N2 — DLQ alert (webhook)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dlq-alert",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-dlq",
+      "name": "Webhook dlq-alert",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "virtulab-dlq-alert"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { alert: 'DLQ depth high', payload: $input.first().json, action: 'notify-developer' } }];"
+      },
+      "id": "code-alert",
+      "name": "Format alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    }
+  ],
+  "connections": {
+    "Webhook dlq-alert": {
+      "main": [[{ "node": "Format alert", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "phase7" }]
+}

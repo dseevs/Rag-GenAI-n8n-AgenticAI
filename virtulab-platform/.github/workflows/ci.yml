@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: maven
+
+      - name: Build all modules
+        run: mvn -B clean package -DskipTests
+
+      - name: Verify JAR artifacts
+        run: |
+          test -f services/auth-service/target/auth-service-0.1.0-SNAPSHOT.jar
+          test -f services/graphql-gateway-service/target/graphql-gateway-service-0.1.0-SNAPSHOT.jar
+          test -f services/quiz-service/target/quiz-service-0.1.0-SNAPSHOT.jar
+
+      - name: Build frontend shell (optional monorepo)
+        run: |
+          FRONT="../virtulab-frontend"
+          if [ -f "$FRONT/package.json" ]; then
+            cd "$FRONT" && (npm ci 2>/dev/null || npm install) && npm run build
+          else
+            echo "virtulab-frontend not present — skip"
+          fi

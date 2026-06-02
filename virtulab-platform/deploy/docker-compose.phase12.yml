@@ -1,0 +1,78 @@
+# Phase 12 — production-oriented compose overlay
+# Usage: docker compose -f docker-compose.yml -f docker-compose.phase3.yml -f docker-compose.phase12.yml up -d
+
+services:
+  virtulab-postgres-replica:
+    image: pgvector/pgvector:pg16
+    container_name: virtulab-postgres-replica
+    profiles: ["replica"]
+    environment:
+      POSTGRES_DB: virtulab
+      POSTGRES_USER: virtulab
+      POSTGRES_PASSWORD: virtulab
+    ports:
+      - "5435:5432"
+    depends_on:
+      virtulab-postgres:
+        condition: service_healthy
+    # Dev stub: separate instance for analytics read routing tests.
+    # Production: configure streaming replication from primary.
+
+  virtulab-auth:
+    build:
+      context: ..
+      dockerfile: deploy/docker/Dockerfile
+      args:
+        SERVICE: auth-service
+    profiles: ["services"]
+    environment:
+      DB_HOST: virtulab-postgres
+      DB_PORT: 5432
+      REDIS_HOST: virtulab-redis
+      KAFKA_BOOTSTRAP: virtulab-redpanda:9092
+    ports:
+      - "8081:8081"
+    depends_on:
+      virtulab-postgres:
+        condition: service_healthy
+
+  virtulab-session:
+    build:
+      context: ..
+      dockerfile: deploy/docker/Dockerfile
+      args:
+        SERVICE: session-service
+    profiles: ["services"]
+    environment:
+      DB_HOST: virtulab-postgres
+      KEYCLOAK_ISSUER: http://virtulab-keycloak:8080/realms/virtulab
+    ports:
+      - "8082:8082"
+    depends_on:
+      - virtulab-postgres
+
+  virtulab-events:
+    build:
+      context: ..
+      dockerfile: deploy/docker/Dockerfile
+      args:
+        SERVICE: lab-events-service
+    profiles: ["services"]
+    environment:
+      DB_HOST: virtulab-postgres
+      KAFKA_BOOTSTRAP: virtulab-redpanda:9092
+      REDIS_HOST: virtulab-redis
+    ports:
+      - "8083:8083"
+
+  virtulab-graphql:
+    build:
+      context: ..
+      dockerfile: deploy/docker/Dockerfile
+      args:
+        SERVICE: graphql-gateway-service
+    profiles: ["services"]
+    environment:
+      KEYCLOAK_ISSUER: http://virtulab-keycloak:8080/realms/virtulab
+    ports:
+      - "8097:8097"

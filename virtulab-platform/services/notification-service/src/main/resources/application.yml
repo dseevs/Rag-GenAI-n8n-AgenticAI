@@ -1,0 +1,25 @@
+server:
+  port: 8092
+
+spring:
+  application:
+    name: notification-service
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5673}
+    username: ${RABBITMQ_USER:virtulab}
+    password: ${RABBITMQ_PASSWORD:virtulab}
+
+virtulab:
+  rabbitmq:
+    queue:
+      notification: q.notification.email
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}

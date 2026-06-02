@@ -1,0 +1,52 @@
+type Query {
+  me: Me!
+  session(attemptId: ID!): Session
+}
+
+type Mutation {
+  startSession(input: StartSessionInput!): Session!
+  recordProgress(input: ProgressInput!): ProgressAck!
+}
+
+type Me {
+  userId: ID!
+  tenantId: String!
+  orgId: String!
+  roles: [String!]!
+}
+
+input StartSessionInput {
+  experimentId: String!
+  attemptId: String!
+  mode: String!
+  lang: String
+}
+
+type Session {
+  id: ID!
+  attemptId: String!
+  experimentId: String!
+  userId: String!
+  tenantId: String!
+  orgId: String!
+  mode: String!
+  lang: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input ProgressInput {
+  experimentId: String!
+  attemptId: String!
+  stepId: String!
+  timeSpentSec: Int
+  progress: JSON!
+}
+
+scalar JSON
+
+type ProgressAck {
+  eventId: ID!
+  duplicate: Boolean!
+}
+
